@@ -1,0 +1,150 @@
+Last revision: Michael Baccia 2016-06-15
+
+- For more information on any of the commands, use help <command_name>
+- gdb supports tab completion!
+
+
+****************
+* PROGRAM FLOW *
+****************
+
+# To load a binary into gdb, simply call gdb with the binary as a parameter
+
+    $ gdb ./test
+
+# To begin execution, use the command "run" <param 1> <param 2> ... <param n>
+
+    (gdb) run one two                       # run the binary with parameters "one" and "two"
+
+# To set a stop point in execution, use the break command to set a breakpoint.
+# break also has many forms:
+
+    (gdb) break main                        # break at (function) main
+    (gdb) break 10                          # break at line 10 in the source code
+    (gdb) break 0x0000000000400680          # break at a specific address
+
+# Note: you can use "start" to begin execution and automatically break at main.
+
+# Conversely, to delete a breakpoint, use "clear".
+
+    (gdb) clear main                        # clear breakpoints on (function) main
+    (gdb) clear 10                          # clear breakpoints on line 10
+    (gdb) clear 0x0000000000400680          # clear breakpoints on an address
+
+# To resume execution after encountering a breakpoint, use "continue" (c)
+
+    (gdb) c                                 # continues execution
+
+# To step through instructions to the next line the the source, use the "step" (s) command.
+
+    (gdb) s                                 # run instructions until next source code line
+    (gdb) s 5                               # run instructions for 5 source code lines
+
+# To step thru one assembly instruction at a time, use the "stepi" (si) command.
+
+    (gdb) si                                # step over one assembly instruction
+    (gdb) si 5                              # step over 5 assembly instructions
+
+
+*******************
+* PRINTING VALUES *
+*******************
+
+# To list the source code of the binary, use "list".
+
+    (gdb) list 1                            # list source starting at line 1
+    (gdb) list main                         # list source starting from (function) main
+
+# To disassemble source code into assembly code, use the "disassemble" (disas) command.
+# disassemble has multiple forms:
+
+    (gdb) disas                             # disassemble from current instruction
+    (gdb) disas main                        # disassemble a specific function
+    (gdb) disas 0x0000000000400680          # disassemble from a specific address
+
+# To print the value of variables, use the "print" command. To be able to print a variable,
+# be sure that you are in the correct stack frame. You can also specify a format by using /<f>.
+# For the list of format characters, see x (examine).
+
+    (gdb) print x                           # print the value of variable x
+    (gdb) print /x x                        # print the value of x in hexadecimal
+
+# You can refer to the values in a specific register by preceding it with a $
+
+    (gdb) print $rsp                        # print the value of rsp
+
+# To the the current values of the registers, use the "info" command with the parameter
+# registers (reg):
+    
+    (gdb) info reg                          # display registers
+
+# To print a range of addresses (such as on the stack), use the "x" command (examine).
+# The format is as follows:
+# 
+#   x/<number><format><size>  address
+#   
+#   to print out <number> values of size <size> in <format> starting at address.
+#
+#   format letters are: o(octal), x(hex), d(decimal), u(unsigned decimal), t(binary),
+#                       f(float), a(address), i(instruction), c(char) and s(string)
+#   size letters are:   b(byte), h(halfword), w(word), g(giant, 8 bytes)
+#
+#   NOTE - When using the string (s) format, you do not need to specify a number or size as gdb
+#          will continue printing until the null terminator \0 is found.
+#
+#   The defaults for format and size are those that were previously used.
+
+    (gdb) x/16xw 0x8bfc4589                 # Print 16 words in hex starting at 0x8bfc4589
+    (gdb) x/32cb $rsp                       # Print 32 bytes as chars starting at the memory
+                                            #  pointed to by rsp
+    (gdb) x/s &HelloWorld                   # Print the string pointed to by the variable
+                                            #  HelloWorld
+
+
+***********************
+* Manipulating Memory *
+***********************
+
+# To modify a value in memory, use the "set" command. Set can be used in many different ways,
+# but here are a few examples:
+
+    (gdb) set variable x = 0x10             # sets the variable x to 0x10 (16 in decimal)
+    (gdb) set {int}0xfffdf20 = 20           # sets memory starting at 0xfffdf20 to 20 as an int
+    (gdb) set {char [4]} 0xfffdf20 = "YES"  # sets memory starting at 0xfffdf20 to the string "YES"
+    (gdb) set $rax = ((int *) $rbx)         # sets rax to the integer pointed to by rbx
+
+
+***********
+* LAYOUTS *
+***********
+
+# gdb offers various layouts for visual assistance. Use the "layout" command to change layouts.
+
+    (gdb) layout asm                        # display assembly
+    (gdb) layout src                        # display source
+    (gdb) layout regs                       # display registers
+    (gdb) layout split                      # display source and assembly
+
+# WARNING -- The layout command can be finnicky at times and may cause a segmentation fault if
+# you frequently swap between layouts. The layout can also become bugged when input from stdin
+# is required or there is output to stdout. If the layout is bugged, exit it using ctrl-x followed
+# by a and enter the layout again.
+
+# NOTE -- the register display can be displayed in tandem with the source OR assembly layout
+# if layout regs is used after the appropriate command, i.e.:
+
+    (gdb) layout asm                        # displays assembly
+    (gdb) layout regs                       # displays registers above assembly display
+
+# To change which window has focus, use the "focus" command
+
+    (gdb) focus <asm | src | regs | cmd>    # change focus to the corresponding window
+    (gdb) focus <next | prev>               # change focus to next/previous window
+
+# To exit the layout, use ctrl-x followed by a
+
+
+*****************************************************************
+* REMEMBER - This list is not comprehensive! Be sure to explore *
+*            more commands using the help command!!             *
+*****************************************************************
