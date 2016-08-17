@@ -21,7 +21,6 @@ Last revision: Michael Baccia 2016-06-15
 
     (gdb) break main                        # break at (function) main
     (gdb) break 10                          # break at line 10 in the source code
-    (gdb) break 0x0000000000400680          # break at a specific address
 
 # Note: you can use "start" to begin execution and automatically break at main.
 
@@ -29,7 +28,6 @@ Last revision: Michael Baccia 2016-06-15
 
     (gdb) clear main                        # clear breakpoints on (function) main
     (gdb) clear 10                          # clear breakpoints on line 10
-    (gdb) clear 0x0000000000400680          # clear breakpoints on an address
 
 # To resume execution after encountering a breakpoint, use "continue" (c)
 
@@ -55,19 +53,21 @@ Last revision: Michael Baccia 2016-06-15
     (gdb) list 1                            # list source starting at line 1
     (gdb) list main                         # list source starting from (function) main
 
+    *NOTE: use "set listsize" to change the default number of lines shown (10). 
+
 # To disassemble source code into assembly code, use the "disassemble" (disas) command.
 # disassemble has multiple forms:
 
     (gdb) disas                             # disassemble from current instruction
     (gdb) disas main                        # disassemble a specific function
-    (gdb) disas 0x0000000000400680          # disassemble from a specific address
+    (gdb) disas 0x400680                    # disassemble from a specific address
 
 # To print the value of variables, use the "print" command. To be able to print a variable,
 # be sure that you are in the correct stack frame. You can also specify a format by using /<f>.
 # For the list of format characters, see x (examine).
 
-    (gdb) print x                           # print the value of variable x
-    (gdb) print /x x                        # print the value of x in hexadecimal
+    (gdb) print a                           # print the value of variable a
+    (gdb) print /x a                        # print the value of a in hexadecimal
 
 # You can refer to the values in a specific register by preceding it with a $
 
