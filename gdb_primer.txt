@@ -127,8 +127,8 @@ Last revision: Michael Baccia 2016-06-15
 
 # WARNING -- The layout command can be finnicky at times and may cause a segmentation fault if
 # you frequently swap between layouts. The layout can also become bugged when input from stdin
-# is required or there is output to stdout. If the layout is bugged, exit it using ctrl-x followed
-# by a and enter the layout again.
+# is required or there is output to stdout. If the layout is bugged, refresh using ctrl-l or exit it
+# using ctrl-x followed by 'a'.
 
 # NOTE -- the register display can be displayed in tandem with the source OR assembly layout
 # if layout regs is used after the appropriate command, i.e.:
